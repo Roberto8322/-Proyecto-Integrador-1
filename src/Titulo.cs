@@ -1,4 +1,5 @@
 using System;
+
 namespace BibliotecaEscolar
 {
     public class Titulo
@@ -6,18 +7,27 @@ namespace BibliotecaEscolar
         public string ISBN { get; set; }
         public string Nombre { get; set; }
         public int PrestamosHistoricos { get; set; }
-        public string[] Ejemplares { get; set; }
+        public int CopiasDisponibles { get; set; }
+        public int CopiasTotales { get; set; }
 
         public Titulo(string isbn, string nombre, int prestamosHistoricos, int cantidadCopias)
         {
             ISBN = isbn;
             Nombre = nombre;
             PrestamosHistoricos = prestamosHistoricos;
-            Ejemplares = new string[cantidadCopias];
-            for (int i = 0; i < cantidadCopias; i++)
+            CopiasTotales = cantidadCopias;
+            CopiasDisponibles = cantidadCopias;
+        }
+
+        public bool RegistrarPrestamo()
+        {
+            if (CopiasDisponibles > 0)
             {
-                Ejemplares[i] = "Ejemplar #" + (i + 1);
+                CopiasDisponibles--;
+                PrestamosHistoricos++;
+                return true;
             }
+            return false;
         }
     }
 }
