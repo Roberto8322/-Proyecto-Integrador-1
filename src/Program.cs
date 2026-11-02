@@ -5,13 +5,30 @@ namespace BibliotecaEscolar
 {
     class Program
     {
-        static void MostrarCatalogo(List<Titulo> catalogo, string tituloSeccion)
+        static void OrdenInsercion(List<Titulo> lista)
         {
-            Console.WriteLine(tituloSeccion);
-            Console.WriteLine("ISBN                 Titulo                        Historico   Disponibles");
-            foreach (var t in catalogo)
+            for (int i = 1; i < lista.Count; i++)
             {
-                Console.WriteLine(t.ISBN + " " + t.Nombre.PadRight(37) + " " + t.PrestamosHistoricos.ToString().PadRight(9) + " " + t.CopiasDisponibles + "/" + t.CopiasTotales);
+                Titulo temp = lista[i];
+                int j = i - 1;
+
+                while (j >= 0 && lista[j].PrestamosHistoricos < temp.PrestamosHistoricos)
+                {
+                    lista[j + 1] = lista[j];
+                    j--;
+                }
+                lista[j + 1] = temp;
+            }
+        }
+
+        static void ImpCatalogo(List<Titulo> lista, string encabezado)
+        {
+            Console.WriteLine(encabezado);
+            Console.WriteLine("ISBN               Titulo                                 Prestamos  Disponibles");
+            
+            foreach (var item in lista)
+            {
+                Console.WriteLine(item.ISBN + " " + item.Nombre.PadRight(37) + " " + item.PrestamosHistoricos.ToString().PadRight(9) + " " + item.CopiasDisponibles + "/" + item.CopiasTotales);
             }
             Console.WriteLine();
         }
@@ -30,17 +47,12 @@ namespace BibliotecaEscolar
                 new Titulo("978-0135957059", "The Pragmatic Programmer", 50, 2)
             };
 
-            MostrarCatalogo(catalogo, "catalog antes de los prestamos (DIA 3)");
+            ImpCatalogo(catalogo, "Catalogo Inicial");
 
-            Console.WriteLine(" registrando 3 prestamos simulad");
-            catalogo[2].RegistrarPrestamo(); 
-            catalogo[1].RegistrarPrestamo();
-            catalogo[2].RegistrarPrestamo(); 
-            Console.WriteLine("1. Prestamo de 'Codigo Limpio' registrado.");
-            Console.WriteLine("2. Prestamo de 'Patrones de Diseno' registrado.");
-            Console.WriteLine("3. Segundo prestamo de 'Codigo Limpio' registrado.\n");
+          
+            OrdenInsercion(catalogo);
 
-            MostrarCatalogo(catalogo, "catalogo despues de los prestamos ");
+            ImpCatalogo(catalogo, "Catalogo Ordenado por Prestamos (Mayor a Menor)");
         }
     }
 }
