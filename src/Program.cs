@@ -21,10 +21,54 @@ namespace BibliotecaEscolar
             }
         }
 
+        
+        static int BusquedaBinaria(List<Titulo> lista, string isbn)
+        {
+            List<Titulo> listaOrdenada = new List<Titulo>(lista);
+            listaOrdenada.Sort((a, b) => string.Compare(a.ISBN, b.ISBN, StringComparison.Ordinal));
+
+            int inicio = 0;
+            int fin = listaOrdenada.Count - 1;
+
+            while (inicio <= fin)
+            {
+                int medio = (inicio + fin) / 2;
+                int res = string.Compare(listaOrdenada[medio].ISBN, isbn, StringComparison.Ordinal);
+
+                if (res == 0) return medio;
+                if (res < 0) inicio = medio + 1;
+                else fin = medio - 1;
+            }
+
+            return -1;
+        }
+
+        
+        static void BusquedaSecuencial(List<Titulo> lista, string palabra)
+        {
+            bool encontrado = false;
+            Console.WriteLine("Resultados para '" + palabra + "':");
+
+            foreach (var item in lista)
+            {
+                if (item.Nombre.ToLower().Contains(palabra.ToLower()))
+                {
+                    Console.WriteLine("- " + item.ISBN + " | " + item.Nombre + " (" + item.CopiasDisponibles + "/" + item.CopiasTotales + " libres)");
+                    encontrado = true;
+                }
+            }
+
+            if (!encontrado)
+            {
+                Console.WriteLine("No se encontraron coincidencias.");
+            }
+            Console.WriteLine();
+        }
+
         static void ImpCatalogo(List<Titulo> lista, string encabezado)
         {
             Console.WriteLine(encabezado);
-            Console.WriteLine("ISBN               Titulo                                 Prestamos  Disponibles");
+            Console.WriteLine("ISBN               Titulo                                  Prestamos  Disponibles");
             
             foreach (var item in lista)
             {
@@ -49,10 +93,27 @@ namespace BibliotecaEscolar
 
             ImpCatalogo(catalogo, "Catalogo Inicial");
 
-          
             OrdenInsercion(catalogo);
 
-            ImpCatalogo(catalogo, "Catalogo Ordenado por Prestamos (Mayor a Menor)");
+            ImpCatalogo(catalogo, " Catalogo Ordenado por Prestamos (Mayor a Menor)");
+
+            
+            Console.WriteLine("Prueba de busqueda (DIA 5)");
+            
+ 
+            BusquedaSecuencial(catalogo, "Design");
+
+   
+            string isbnBuscar = "978-0132350884";
+            int pos = BusquedaBinaria(catalogo, isbnBuscar);
+            if (pos != -1)
+            {
+                Console.WriteLine(" Busqueda Binaria: Encontrado el libro con ISBN" + isbnBuscar);
+            }
+            else
+            {
+                Console.WriteLine("Busqueda Binaria: ISBN no encontrado");
+            }
         }
     }
 }
