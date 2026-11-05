@@ -21,7 +21,6 @@ namespace BibliotecaEscolar
             }
         }
 
-        
         static int BusquedaBinaria(List<Titulo> lista, string isbn)
         {
             List<Titulo> listaOrdenada = new List<Titulo>(lista);
@@ -43,7 +42,6 @@ namespace BibliotecaEscolar
             return -1;
         }
 
-        
         static void BusquedaSecuencial(List<Titulo> lista, string palabra)
         {
             bool encontrado = false;
@@ -53,7 +51,7 @@ namespace BibliotecaEscolar
             {
                 if (item.Nombre.ToLower().Contains(palabra.ToLower()))
                 {
-                    Console.WriteLine("- " + item.ISBN + " | " + item.Nombre + " (" + item.CopiasDisponibles + "/" + item.CopiasTotales + " libres)");
+                    Console.WriteLine("- " + item.ISBN + " " + item.Nombre + " (" + item.CopiasDisponibles + "/" + item.CopiasTotales + " libres)");
                     encontrado = true;
                 }
             }
@@ -68,8 +66,8 @@ namespace BibliotecaEscolar
         static void ImpCatalogo(List<Titulo> lista, string encabezado)
         {
             Console.WriteLine(encabezado);
-            Console.WriteLine("ISBN               Titulo                                  Prestamos  Disponibles");
-            
+            Console.WriteLine("ISBN               Titulo                          Prestamos  Disponibles");
+
             foreach (var item in lista)
             {
                 Console.WriteLine(item.ISBN + " " + item.Nombre.PadRight(37) + " " + item.PrestamosHistoricos.ToString().PadRight(9) + " " + item.CopiasDisponibles + "/" + item.CopiasTotales);
@@ -93,27 +91,27 @@ namespace BibliotecaEscolar
 
             ImpCatalogo(catalogo, "Catalogo Inicial");
 
+            catalogo[2].RegistrarPrestamo();
+            catalogo[1].RegistrarPrestamo();
+
             OrdenInsercion(catalogo);
 
-            ImpCatalogo(catalogo, " Catalogo Ordenado por Prestamos (Mayor a Menor)");
+            ImpCatalogo(catalogo, "Catalogo Ordenado por Prestamos (Mayor a Menor)");
 
-            
-            Console.WriteLine("Prueba de busqueda (DIA 5)");
-            
- 
+            Console.WriteLine("pruebas de busqueda");
             BusquedaSecuencial(catalogo, "Design");
 
-   
             string isbnBuscar = "978-0132350884";
             int pos = BusquedaBinaria(catalogo, isbnBuscar);
             if (pos != -1)
             {
-                Console.WriteLine(" Busqueda Binaria: Encontrado el libro con ISBN" + isbnBuscar);
+                Console.WriteLine("Busqueda Binaria: Encontrado el libro con ISBN " + isbnBuscar);
             }
             else
             {
-                Console.WriteLine("Busqueda Binaria: ISBN no encontrado");
+                Console.WriteLine("Busqueda Binaria: ISBN no encontrado.");
             }
+            Console.ReadKey();
         }
     }
 }
